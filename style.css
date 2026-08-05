@@ -17,8 +17,9 @@
     padding: 0;
 }
 
+/* Десктоп фон да телефон фоны сияқты толық бірдей бежевый түс */
 body {
-    background-color: #1e1e1e;
+    background-color: var(--bg-color);
     font-family: var(--font-body);
     color: var(--text-main);
     display: flex;
@@ -27,18 +28,23 @@ body {
     min-height: 100vh;
 }
 
+/* ШЕКТЕУ: Ортадағы блок ең көбі 500px болады */
 .mobile-wrapper {
     width: 100%;
-    max-width: 480px;
+    max-width: 500px;
     background-color: var(--bg-color);
     min-height: 100vh;
-    box-shadow: 0 0 40px rgba(0,0,0,0.4);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
     position: relative;
     overflow-x: hidden;
     padding-bottom: 50px;
+    margin: 0 auto;
 }
 
-/* ВИНИЛ ПЛАСТИНКАСЫ (МУЗЫКА БАТЫРМАСЫ) */
+/* ==========================================
+   ВИНИЛ ПЛАСТИНКАСЫ (МУЗЫКА БАТЫРМАСЫ)
+   ========================================== */
+/* ТЕЛЕФОНДА: Оң жақ шетте сақталады, скроллда кіріп-шығады */
 .vinyl-wrapper {
     position: fixed;
     top: 25px;
@@ -48,11 +54,26 @@ body {
     height: 86px;
     cursor: pointer;
     transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease;
-    filter: drop-shadow(0 6px 16px rgba(0,0,0,0.35));
+    filter: drop-shadow(0 6px 16px rgba(0,0,0,0.25));
 }
 
 .vinyl-wrapper.scrolling {
     right: -62px;
+}
+
+/* ДЕСКТОПТА: Оң жақтағы бос кеңістіктің тура ортасында орналасады */
+@media (min-width: 850px) {
+    .vinyl-wrapper {
+        top: 50% !important;
+        right: calc((100vw - 500px) / 4 - 70px) !important;
+        left: auto !important;
+        transform: translateY(-50%) !important;
+        width: 140px;
+        height: 140px;
+    }
+    .vinyl-wrapper.scrolling {
+        right: calc((100vw - 500px) / 4 - 70px) !important;
+    }
 }
 
 .vinyl-disk {
@@ -87,8 +108,8 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 32px;
-    height: 32px;
+    width: 38%;
+    height: 38%;
     background: radial-gradient(circle, #dfc498 0%, #aa8c72 100%);
     border-radius: 50%;
     border: 2px solid #1e1e1e;
@@ -99,8 +120,8 @@ body {
 }
 
 .vinyl-hole {
-    width: 6px;
-    height: 6px;
+    width: 20%;
+    height: 20%;
     background-color: #fcfaf7;
     border-radius: 50%;
     border: 1px solid #333;
@@ -737,7 +758,7 @@ body {
     left: 50%;
     transform: translateX(-50%) translateY(100%);
     width: 100%;
-    max-width: 480px;
+    max-width: 500px;
     background-color: var(--olive-bg);
     border-radius: 28px 28px 0 0;
     z-index: 1001;

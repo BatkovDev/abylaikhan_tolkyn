@@ -128,7 +128,6 @@ function handleFormSubmit(event) {
         if (val) names.push(val);
     });
 
-    // Қонақ аты-жөні толтырылмаған болса жіберуді бұғаттау
     if (names.length === 0) {
         alert('Өтініш, аты-жөніңізді енгізіңіз!');
         if (event) event.preventDefault();
