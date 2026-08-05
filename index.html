@@ -1,515 +1,46 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="kk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Приглашение на свадьбу: Абылайхан & Толқын</title>
+    <title>Үйлену тойына шақыру: Абылайхан & Толқын</title>
     
     <!-- Подключение шрифтов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Подключение Leaflet Maps API -->
+    <!-- Leaflet Maps API -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <style>
-        :root {
-            --bg-color: #fcfaf7;
-            --bg-glass: #fcfaf7d6; /* Полупрозрачный матовый фон */
-            --text-main: #2d2c2a;
-            --text-muted: #7a7671;
-            --accent-color: #aa8c72;
-            --accent-soft: #f4eee7;
-            --card-shadow: 0 12px 32px rgba(170, 140, 114, 0.08);
-            --font-title: 'Cormorant Garamond', serif;
-            --font-body: 'Montserrat', sans-serif;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: #1e1e1e;
-            font-family: var(--font-body);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        /* Мобильный контейнер */
-        .mobile-wrapper {
-            width: 100%;
-            max-width: 480px;
-            background-color: var(--bg-color);
-            min-height: 100vh;
-            box-shadow: 0 0 40px rgba(0,0,0,0.4);
-            position: relative;
-            overflow-x: hidden;
-            padding-bottom: 50px;
-        }
-
-        /* --- ВЕРХНИЙ БЛОК --- */
-        .top-section-card {
-            background-color: var(--bg-glass);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 0 0 20px 20px;
-            position: relative;
-            z-index: 2;
-            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
-            padding-bottom: 35px;
-        }
-
-        /* Фото в шапке */
-        .hero-container {
-            position: relative;
-            width: 100%;
-            height: 500px;
-            background-color: var(--bg-color);
-        }
-
-        .hero-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 15%;
-            display: block;
-        }
-
-        .hero-blend-bottom {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 140px;
-            background: linear-gradient(to bottom, rgba(252,250,247,0) 0%, var(--bg-color) 100%);
-            pointer-events: none;
-        }
-
-        /* Заголовок с именами */
-        .header-content {
-            text-align: center;
-            padding: 0 20px 15px;
-            position: relative;
-            margin-top: -30px;
-            z-index: 2;
-        }
-
-        .invitation-badge {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--accent-color);
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-
-        .names-title {
-            font-family: var(--font-title);
-            font-size: 42px;
-            font-weight: 400;
-            line-height: 1.1;
-            color: var(--text-main);
-        }
-
-        .names-title span {
-            display: block;
-            font-style: italic;
-            font-size: 28px;
-            color: var(--accent-color);
-            margin: 4px 0;
-        }
-
-        /* Дата, Время и Место проведения */
-        .event-datetime-block {
-            text-align: center;
-            padding: 0 20px;
-            margin-top: 10px;
-        }
-
-        .date-display {
-            font-family: var(--font-title);
-            font-size: 36px;
-            font-weight: 500;
-            letter-spacing: 2px;
-            color: var(--text-main);
-            line-height: 1.2;
-        }
-
-        .time-display {
-            font-family: var(--font-title);
-            font-size: 36px;
-            font-weight: 400;
-            font-style: italic;
-            color: var(--accent-color);
-            margin-top: 4px;
-        }
-
-        .venue-info-top {
-            margin-top: 15px;
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .venue-info-top strong {
-            color: var(--text-main);
-            font-weight: 500;
-            font-size: 16px;
-        }
-
-        .divider-dots {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            margin: 25px 0;
-        }
-
-        .divider-dots span {
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background-color: var(--accent-color);
-            opacity: 0.6;
-        }
-
-        /* Таймер отсчета */
-        .timer-section {
-            margin: 20px 20px 0;
-        }
-
-        .timer-label {
-            text-align: center;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 2.5px;
-            color: var(--text-main); /* Темный хорошо читаемый цвет */
-            font-weight: 600;
-            margin-bottom: 18px;
-        }
-
-        .countdown-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-
-        .timer-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(4px);
-            border: none;
-            border-radius: 18px;
-            padding: 16px 8px;
-            text-align: center;
-            box-shadow: var(--card-shadow);
-        }
-
-        /* Цифры на Arial */
-        .timer-card .val {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--text-main);
-            line-height: 1;
-        }
-
-        /* Темные видимые подписи под цифрами */
-        .timer-card .desc {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-main); /* Темный цвет для контраста на бежевом */
-            font-weight: 600;
-            margin-top: 6px;
-        }
-
-        /* --- БЛОК ВИДЕО --- */
-        .video-section-middle {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            margin-top: -15px;
-            margin-bottom: -15px;
-            overflow: hidden;
-            background-color: #000;
-        }
-
-        .video-section-middle video {
-            width: 100%;
-            height: 420px;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* --- НИЖНИЙ БЛОК --- */
-        .bottom-section-card {
-            background-color: var(--bg-glass);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px 20px 0 0;
-            position: relative;
-            z-index: 2;
-            padding-top: 40px;
-            box-shadow: 0 -14px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        /* Форма */
-        .rsvp-form-section {
-            padding: 0 20px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .rsvp-title {
-            font-family: var(--font-title);
-            font-size: 30px;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-
-        .rsvp-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 24px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-main);
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .form-label .req {
-            color: #d9534f;
-        }
-
-        /* Динамические поля ввода гостей */
-        .guest-input-row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 15px 18px;
-            border: 1px solid rgba(170, 140, 114, 0.25);
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 16px;
-            font-family: var(--font-body);
-            font-size: 14px;
-            color: var(--text-main);
-            outline: none;
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            border-color: var(--accent-color);
-            background: #ffffff;
-        }
-
-        .remove-guest-btn {
-            background: rgba(170, 140, 114, 0.12);
-            border: none;
-            color: var(--accent-color);
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all 0.2s ease;
-        }
-
-        .remove-guest-btn:active {
-            background: rgba(217, 83, 79, 0.2);
-            color: #d9534f;
-        }
-
-        .add-guest-btn {
-            background: transparent;
-            border: 1px dashed var(--accent-color);
-            color: var(--accent-color);
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 16px;
-            font-family: var(--font-body);
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 4px;
-            margin-bottom: 10px;
-            transition: all 0.2s ease;
-        }
-
-        .add-guest-btn:active {
-            background: var(--accent-soft);
-        }
-
-        .radio-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .radio-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 14px 18px;
-            border-radius: 16px;
-            cursor: pointer;
-            border: 1px solid rgba(170, 140, 114, 0.2);
-            box-shadow: var(--card-shadow);
-            font-size: 14px;
-            transition: background 0.2s;
-        }
-
-        .radio-card input[type="radio"] {
-            accent-color: var(--accent-color);
-            width: 18px;
-            height: 18px;
-        }
-
-        .submit-btn {
-            width: 100%;
-            background-color: var(--accent-color);
-            color: #ffffff;
-            border: none;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 14px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            cursor: pointer;
-            box-shadow: 0 6px 18px rgba(170, 140, 114, 0.3);
-            font-family: var(--font-body);
-            margin-top: 10px;
-            transition: background 0.3s ease;
-        }
-
-        .submit-btn:active {
-            opacity: 0.9;
-        }
-
-        .success-message {
-            padding: 30px 10px;
-            text-align: center;
-        }
-
-        .success-message svg {
-            margin-bottom: 12px;
-        }
-
-        .success-message h3 {
-            font-family: var(--font-title);
-            font-size: 28px;
-            color: var(--text-main);
-            margin-bottom: 6px;
-        }
-
-        .success-message p {
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        /* Секция карты в самом низу */
-        .map-section {
-            padding: 0 20px;
-            text-align: center;
-        }
-
-        .map-title {
-            font-family: var(--font-title);
-            font-size: 30px;
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-
-        #leaflet-map {
-            width: 100%;
-            height: 250px;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            z-index: 1;
-            margin: 15px 0 20px;
-            background: var(--bg-color);
-        }
-
-        .leaflet-control-attribution {
-            display: none !important;
-        }
-
-        .gis-direct-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            background-color: #64b928;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 20px;
-            border-radius: 16px;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            box-shadow: 0 6px 18px rgba(100, 185, 40, 0.22);
-            transition: opacity 0.2s ease;
-        }
-
-        .gis-direct-btn:active {
-            opacity: 0.9;
-        }
-
-        .footer-note {
-            text-align: center;
-            margin-top: 40px;
-            font-family: var(--font-title);
-            font-size: 22px;
-            font-style: italic;
-            color: var(--accent-color);
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- Фондық музыка -->
+    <audio id="bgMusic" src="./music.mp3" loop></audio>
+    <button class="music-toggle-btn" id="musicToggleBtn" title="Музыканы қосу/өшіру">
+        <svg id="musicIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+    </button>
 
     <div class="mobile-wrapper">
         
         <!-- ВЕРХНИЙ БЛОК -->
         <div class="top-section-card">
-            <!-- 1. Шапка с фото -->
+            <!-- Шақыру фотосы -->
             <div class="hero-container">
-                <img src="photo.jpg" alt="Абылайхан и Толқын" class="hero-img">
+                <img src="photo.jpg" alt="Абылайхан & Толқын" class="hero-img">
                 <div class="hero-blend-bottom"></div>
             </div>
 
             <!-- Имена -->
             <div class="header-content">
-                <div class="invitation-badge">Приглашение на свадьбу</div>
+                <div class="invitation-badge">Үйлену тойына шақыру</div>
                 <h1 class="names-title">
                     Абылайхан
                     <span>&</span>
@@ -517,13 +48,16 @@
                 </h1>
             </div>
 
-            <!-- 2. Дата, Время и Место проведения -->
-            <div class="event-datetime-block">
-                <div class="date-display">27 СЕНТЯБРЯ</div>
-                <div class="time-display">в 15:00 ч.</div>
-                <div class="venue-info-top">
-                    Банкетный зал <strong>«Меруерт»</strong><br>
-                    г. Кокшетау
+            <!-- Шақыру мәтіні -->
+            <div class="invitation-text-block">
+                <h2 class="sub-title">Құрметті қонақтар!</h2>
+                <p class="main-invitation-text">
+                    Құрметті ағайын-туыс, құда-жекжат, дос-жарандар!<br>
+                    Сіздерді ұлымыз бен келініміздің шаңырақ көтеру тойына арналған салтанатты ақ дастарханымыздың қадірлі қонағы болуға шақырамыз.
+                </p>
+                <div class="hosts-block">
+                    <span>Ізгі тілекпен:</span>
+                    <strong>Сағит & Дәмелі</strong>
                 </div>
             </div>
 
@@ -531,31 +65,63 @@
                 <span></span><span></span><span></span>
             </div>
 
-            <!-- 3. Таймер отсчета -->
+            <!-- КҮНТІЗБЕ БЛОГЫ ЖӘНЕ БАТЫРМА -->
+            <div class="calendar-section">
+                <div class="date-header-title">Той өтетін күні</div>
+                <div class="date-big">27 қыркүйек 2026 жыл</div>
+                <div class="time-big">Сағат 15:00</div>
+
+                <!-- Күнтізбені ашу және сақтау батырмасы -->
+                <button class="open-calendar-btn" onclick="openBottomSheet()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                        <path d="M12 14v4M10 16h4"></path>
+                    </svg>
+                    Күнтізбеге қосу
+                </button>
+
+                <div class="venue-brief">
+                    <div class="venue-title">Мекен-жайымыз:</div>
+                    <div class="venue-address">Көкшетау қ., «Меруерт» мейрамханасы</div>
+                    <button class="scroll-map-btn" onclick="scrollToMap()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                        КАРТАДАН КӨРУ
+                    </button>
+                </div>
+            </div>
+
+            <div class="divider-dots">
+                <span></span><span></span><span></span>
+            </div>
+
+            <!-- ТАЙМЕР -->
             <div class="timer-section">
-                <div class="timer-label">До торжества осталось</div>
+                <div class="timer-label">Тойға дейін</div>
                 <div class="countdown-grid">
                     <div class="timer-card">
                         <div class="val" id="days">00</div>
-                        <div class="desc">Дней</div>
+                        <div class="desc">КҮН</div>
                     </div>
                     <div class="timer-card">
                         <div class="val" id="hours">00</div>
-                        <div class="desc">Часов</div>
+                        <div class="desc">САҒАТ</div>
                     </div>
                     <div class="timer-card">
                         <div class="val" id="minutes">00</div>
-                        <div class="desc">Мин</div>
+                        <div class="desc">МИН</div>
                     </div>
                     <div class="timer-card">
                         <div class="val" id="seconds">00</div>
-                        <div class="desc">Сек</div>
+                        <div class="desc">СЕК</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 4. ВИДЕО -->
+        <!-- ВИДЕО БЛОК -->
         <div class="video-section-middle">
             <video autoplay loop muted playsinline poster="photo.jpg">
                 <source src="video.mp4" type="video/mp4">
@@ -564,66 +130,178 @@
 
         <!-- НИЖНИЙ БЛОК -->
         <div class="bottom-section-card">
-            
-            <div class="rsvp-form-section">
-                <div class="rsvp-title">Опрос для гостей</div>
-                <div class="rsvp-desc">Пожалуйста, ответьте на пару вопросов:</div>
+
+            <!-- ТОЙ БАҒДАРЛАМАСЫ -->
+            <div class="program-ref-section">
+                <h2 class="program-ref-title">ТОЙ БАҒДАРЛАМАСЫ</h2>
                 
-                <!-- Сообщение об успешной отправке -->
-                <div id="formSuccessMessage" class="success-message" style="display: none;">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#aa8c72" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
-                    <h3>Спасибо!</h3>
-                    <p>Ваш ответ успешно сохранен.</p>
+                <div class="program-ref-header">
+                    <svg class="branch-icon branch-left" viewBox="0 0 100 40" fill="none" stroke="currentColor">
+                        <path d="M10,35 Q50,5 90,20" stroke-width="1.5"/>
+                        <path d="M25,25 Q15,15 20,10" stroke-width="1.2"/>
+                        <path d="M40,18 Q35,5 42,5" stroke-width="1.2"/>
+                        <path d="M60,15 Q60,2 68,6" stroke-width="1.2"/>
+                        <path d="M78,18 Q85,10 88,15" stroke-width="1.2"/>
+                    </svg>
+
+                    <div class="program-date-text">
+                        <strong>27 қыркүйек 2026</strong>
+                        <span>жексенбі</span>
+                    </div>
+
+                    <svg class="branch-icon branch-right" viewBox="0 0 100 40" fill="none" stroke="currentColor">
+                        <path d="M10,20 Q50,5 90,35" stroke-width="1.5"/>
+                        <path d="M22,18 Q15,10 22,15" stroke-width="1.2"/>
+                        <path d="M40,15 Q40,2 48,6" stroke-width="1.2"/>
+                        <path d="M60,18 Q65,5 72,5" stroke-width="1.2"/>
+                        <path d="M75,25 Q85,15 80,10" stroke-width="1.2"/>
+                    </svg>
                 </div>
 
-                <!-- Форма отправки напрямую в Google Форму -->
+                <div class="ref-timeline">
+                    <!-- 1. Утро невесты (bride.svg) -->
+                    <div class="ref-timeline-row">
+                        <div class="ref-time">09:00</div>
+                        <div class="ref-node">
+                            <div class="ref-icon-circle">
+                                <svg width="26" height="26" viewBox="0 0 92 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M44.9748 40.3197C45.028 40.3577 45.0812 40.3957 45.1303 40.4413C45.1303 40.4413 45.1343 40.4372 45.1343 40.4413C45.0846 40.3992 45.0321 40.3577 44.9748 40.3197ZM67.7365 61.556L56.4486 45.0926L56.2475 44.8003C55.9629 44.3865 55.4509 44.2082 54.9687 44.3561C54.4906 44.5081 54.168 44.9441 54.168 45.445V45.7179C51.9937 45.6157 50.2941 45.2135 49.3759 44.5835V42.1094C49.5314 42.003 49.7096 41.9043 49.9071 41.8137C49.972 41.7792 50.0398 41.7488 50.1082 41.7225C50.1801 41.6921 50.2526 41.6617 50.3286 41.6354C50.4046 41.605 50.4805 41.5787 50.56 41.5518C50.8786 41.4495 51.2316 41.3543 51.6109 41.2748C51.7173 41.252 51.8272 41.2333 51.937 41.214C52.1609 41.1725 52.3923 41.138 52.6314 41.1076C52.8096 41.0848 52.9955 41.0661 53.189 41.0468C53.2912 41.0357 53.3976 41.0276 53.5075 41.0205C53.5151 41.0165 53.5262 41.0164 53.5338 41.0164C53.9436 40.986 54.3077 40.7359 54.4783 40.3601L55.2639 38.6715L57.4948 33.8829C58.2955 32.316 58.4282 30.6198 57.8858 28.9734C57.4568 27.6758 56.6222 26.5566 55.5561 25.7745C54.8769 25.2701 54.1066 24.9019 53.2831 24.7044C53.1463 24.674 53.0095 24.6436 52.8693 24.6208C50.5699 24.2415 48.3162 25.0685 46.8328 26.8365C46.7492 26.9353 46.6166 26.9885 46.4687 26.9885C46.3209 26.9885 46.1881 26.9353 46.1046 26.8365C44.6212 25.0685 42.3669 24.2415 40.0676 24.6208C39.9273 24.6436 39.7905 24.674 39.6543 24.7044C38.8308 24.9054 38.057 25.2696 37.3813 25.7745C36.3153 26.5601 35.4841 27.6753 35.0516 28.9734C34.5092 30.6204 34.6419 32.3125 35.435 33.8718L37.6736 38.6715L38.4591 40.3601C38.6298 40.7359 38.9945 40.986 39.4042 41.0164C39.4118 41.0164 39.4229 41.0165 39.4305 41.0205C39.5404 41.0281 39.6468 41.0357 39.7496 41.0468C39.9431 41.0655 40.1289 41.0848 40.3072 41.1076C40.5463 41.138 40.7777 41.1719 41.0016 41.214C41.1114 41.2333 41.2219 41.252 41.3277 41.2748C41.707 41.3543 42.06 41.4495 42.3786 41.5518C42.458 41.5781 42.534 41.605 42.61 41.6354C42.686 41.6617 42.7579 41.6921 42.8297 41.7225C42.8981 41.7488 42.9665 41.7792 43.0308 41.8137C43.2284 41.9048 43.4067 42.0036 43.5621 42.1094V44.5835C42.6439 45.2135 40.9443 45.6157 38.77 45.7179V45.445C38.77 44.9441 38.4474 44.5081 37.9658 44.3561C37.4877 44.2117 36.9757 44.39 36.6911 44.8003L36.49 45.0926L25.2021 61.556C24.8987 61.9961 24.9402 62.5806 25.3043 62.9751C25.3803 63.0587 27.2395 65.0465 30.7797 67.0238C34.02 68.8409 39.3738 70.9999 46.4693 70.9999C60.0717 70.9999 67.5617 63.0546 67.6336 62.971C67.9983 62.5806 68.0399 61.9961 67.7365 61.556ZM46.4699 68.7234C36.1112 68.7234 29.6078 63.7869 27.6312 62.0417L37.2837 47.9688C37.3024 47.9729 37.3176 48.0804 37.3369 48.0804C37.3749 47.9915 37.4128 48.0032 37.4508 48.0067C37.4584 48.0067 37.4619 48.0108 37.466 48.0067C37.5192 48.0178 37.5759 48.0219 37.6332 48.0219C41.143 48.0219 43.6586 47.4299 45.1303 46.2539C45.267 46.1516 45.3921 46.0377 45.5096 45.9202C45.7224 45.7074 45.8433 45.4193 45.8433 45.1159V41.5799C45.8433 41.2765 45.7218 40.9919 45.5096 40.7756C45.426 40.6921 45.339 40.6126 45.2443 40.5325C45.2104 40.5021 45.1723 40.4717 45.1343 40.4413C45.0846 40.3992 45.0321 40.3577 44.9748 40.3197C44.8532 40.2286 44.7281 40.145 44.5914 40.0614C44.4283 39.9626 44.2535 39.8714 44.0718 39.7809C44.0338 39.7622 43.9999 39.7429 43.9619 39.7318C43.8859 39.6938 43.8064 39.6599 43.7264 39.6254C42.7895 39.2309 41.6281 38.9538 40.2511 38.806V38.8019L37.4929 32.8829L37.4812 32.8601C36.9499 31.8279 36.8629 30.7618 37.2194 29.6917C37.7051 28.2235 38.9688 27.1194 40.4446 26.8727C41.9355 26.6261 43.4002 27.1574 44.3605 28.303C44.8877 28.9289 45.6539 29.2931 46.4699 29.2931C47.2858 29.2931 48.052 28.9289 48.5833 28.303C49.5395 27.1609 51.0042 26.6261 52.4952 26.8727C53.971 27.1194 55.2346 28.2235 55.7203 29.6917C56.081 30.777 55.9933 31.8162 55.4544 32.8753L52.6922 38.8019V38.806C51.3146 38.9538 50.1497 39.2309 49.2128 39.6254C49.1368 39.6593 49.0649 39.6897 48.9965 39.7242C48.9434 39.7435 48.8902 39.7657 48.8411 39.7961C48.7651 39.834 48.6932 39.872 48.6208 39.91C48.5261 39.9556 48.4349 40.0088 48.3472 40.062C48.2373 40.1304 48.1309 40.2023 48.0287 40.2748C48.0175 40.2824 48.0059 40.2899 47.9942 40.301C47.9299 40.3425 47.8691 40.3922 47.8083 40.4413C47.7703 40.4676 47.7364 40.498 47.6985 40.5325C47.6038 40.6085 47.5161 40.6921 47.4331 40.7756C47.2169 40.9919 47.0994 41.2765 47.0994 41.5799V45.1159C47.0994 45.4193 47.2168 45.708 47.4296 45.9202C47.547 46.0377 47.6727 46.1516 47.8089 46.2539C49.2812 47.4305 51.7968 48.0219 55.3065 48.0219C55.3632 48.0219 55.4205 48.0178 55.4737 48.0067C55.4772 48.0108 55.4848 48.0067 55.4924 48.0067C55.5304 47.9991 55.5684 47.9915 55.6064 47.9804C55.6251 47.9804 55.6403 47.9729 55.6555 47.9688L65.3081 62.0417C63.3314 63.7869 56.8285 68.7234 46.4699 68.7234Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ref-info">
+                            <h3>Утро невесты</h3>
+                            <p>Подружка невесты обязательно!</p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Сборы жениха (groom.svg) -->
+                    <div class="ref-timeline-row">
+                        <div class="ref-time">09:30</div>
+                        <div class="ref-node">
+                            <div class="ref-icon-circle">
+                                <svg width="26" height="26" viewBox="0 0 92 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M69.4518 31.697C69.3976 31.3452 69.1793 31.0308 68.8649 30.8591L58.8578 25.4701L58.2626 25.1519C57.9108 24.9588 57.4751 24.9672 57.1355 25.1732C56.7921 25.3784 56.5778 25.7554 56.5778 26.1537V33.3115C56.3977 33.2908 56.2091 33.2695 56.0245 33.2405C55.8734 33.2198 55.7231 33.1946 55.572 33.165C55.4591 33.1482 55.3454 33.1275 55.2325 33.0978C55.1782 33.0894 55.1233 33.0772 55.0691 33.0688C55.0652 33.0643 55.0607 33.0642 55.0568 33.0642C55.0523 33.0604 55.0485 33.0604 55.0446 33.0604C55.0401 33.0604 55.0317 33.0558 55.0278 33.0558C54.4288 32.9345 53.8336 33.3115 53.687 33.9067L53.4269 34.9834V34.9963L46.2316 64.9765V64.9804L45.1213 69.5986C45.0794 69.7787 45.0794 69.9588 45.1213 70.1305C45.1252 70.1389 45.1252 70.1512 45.1297 70.1596C45.1588 70.2687 45.2007 70.3694 45.2595 70.4611C45.2762 70.4862 45.2885 70.5069 45.3098 70.5321C45.3182 70.5489 45.3311 70.5611 45.3434 70.5779C45.3518 70.5908 45.3647 70.6031 45.3769 70.6153C45.3899 70.6321 45.4067 70.6489 45.4228 70.6612C45.4312 70.6735 45.4396 70.6864 45.4525 70.6948C45.4609 70.7032 45.4692 70.7115 45.4815 70.7199C45.4854 70.7238 45.4944 70.7322 45.4983 70.7322C45.5151 70.749 45.5274 70.7612 45.5442 70.7696C45.5487 70.7741 45.5486 70.778 45.5525 70.778C45.5777 70.7948 45.6029 70.8155 45.6319 70.8284C45.6449 70.8368 45.6571 70.8452 45.67 70.8535C45.6991 70.8703 45.7288 70.8871 45.7624 70.8994C45.7753 70.9078 45.792 70.9116 45.8043 70.9162C45.8211 70.9245 45.8378 70.9329 45.8585 70.9375C45.8714 70.9413 45.8837 70.9458 45.8966 70.9497C45.9173 70.9536 45.9386 70.962 45.9592 70.9665C45.9799 70.9704 46.0012 70.9788 46.0263 70.9788C46.0393 70.9833 46.0516 70.9872 46.0683 70.9872C46.0813 70.9911 46.0935 70.9911 46.1103 70.9911C46.1477 70.9956 46.1897 70.9994 46.2316 70.9994C46.2736 70.9994 46.3156 70.9956 46.3531 70.9911C46.3653 70.9911 46.3782 70.9911 46.3905 70.9872C46.4034 70.9872 46.4157 70.9872 46.4241 70.9833C46.4324 70.9833 46.437 70.9833 46.4408 70.9788C46.4828 70.9743 46.5202 70.962 46.5583 70.9497C46.5706 70.9497 46.5789 70.9452 46.5873 70.9413C46.6125 70.9375 46.6377 70.9291 46.6583 70.9162C46.6919 70.9039 46.7255 70.891 46.7546 70.8742C46.7675 70.8658 46.7752 70.8613 46.7836 70.8535C46.792 70.8535 46.7965 70.849 46.8049 70.8452C46.8423 70.8238 46.8805 70.7993 46.9179 70.7696C46.9431 70.7528 46.9682 70.7322 46.9934 70.707C46.9979 70.7031 47.0063 70.6986 47.0102 70.6902C47.0231 70.6818 47.0353 70.6696 47.0482 70.6528C47.0605 70.6444 47.0734 70.6276 47.0857 70.6153C47.0895 70.6115 47.0941 70.6069 47.0941 70.6031C47.1064 70.5863 47.1192 70.574 47.136 70.5573L66.5262 48.5223C66.8696 48.137 66.9077 47.567 66.6185 47.1396L61.837 39.9612L69.129 32.6692C69.3846 32.4135 69.5021 32.0533 69.4518 31.697ZM59.5659 39.0097C59.1805 39.3951 59.1218 39.9986 59.4233 40.4473L64.2384 47.6761L48.4103 65.6583L55.652 35.4896C55.7863 35.5063 55.9206 35.527 56.0542 35.5438C56.1633 35.556 56.2679 35.5689 56.3731 35.5773C56.6326 35.607 56.8883 35.6277 57.1355 35.6399C57.2027 35.6399 57.2652 35.6438 57.3285 35.6438C57.4583 35.6484 57.5887 35.6522 57.7184 35.6522C58.3472 35.6522 58.8584 35.1409 58.8584 34.5122V28.0587L66.4351 32.1405L59.5659 39.0097Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ref-info">
+                            <h3>Сборы жениха</h3>
+                            <p>Друг жениха обязательно!</p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Мешітте неке қию (rings.svg) -->
+                    <div class="ref-timeline-row">
+                        <div class="ref-time">12:30</div>
+                        <div class="ref-node">
+                            <div class="ref-icon-circle">
+                                <svg width="26" height="26" viewBox="0 0 92 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M64.4909 19C62.5985 19 61.1029 19.9609 60.0534 21.2095C58.9783 20.0078 57.4281 19 55.7405 19C52.2046 19 49.6387 21.7921 49.6387 25.6402C49.6387 27.7226 50.1772 30.0482 54.0805 32.9265C55.2125 33.7608 56.1501 34.5506 56.8915 35.2246C57.2124 35.518 57.4997 35.7906 57.7472 36.0333C58.5668 36.8401 58.9826 37.3492 58.9911 37.3596C59.2551 37.6891 59.6523 37.8773 60.0747 37.8792H60.0771C60.4971 37.8792 60.8967 37.6867 61.1607 37.3596C61.1712 37.3492 61.7775 36.6054 62.973 35.4905C63.7542 34.7619 64.7872 33.8727 66.0714 32.9265C69.9747 30.0477 70.5108 27.7245 70.5108 25.6402C70.5103 21.7921 67.9799 19 64.4909 19ZM64.417 30.6862C62.4127 32.1647 60.9678 33.5124 60.0766 34.4226C59.183 33.5124 57.7405 32.1647 55.7339 30.6862C52.4241 28.2445 52.4241 26.6774 52.4241 25.6407C52.4241 23.7209 53.4504 21.7864 55.7401 21.7864C56.9565 21.7864 58.4142 23.3004 58.7626 24.285C58.9569 24.8235 59.4618 25.1908 60.0363 25.2079C60.5981 25.2207 61.1347 24.887 61.3566 24.3589C61.8614 23.172 62.983 21.7864 64.4909 21.7864C66.7275 21.7864 67.7268 23.7209 67.7268 25.6407C67.7268 26.6774 67.7267 28.2445 64.417 30.6862Z" fill="currentColor"/>
+                                    <path d="M57.4096 48.3738C57.4096 54.3888 55.0038 59.9838 50.6384 64.1235C50.0809 64.6535 49.2001 64.6283 48.6721 64.0728C48.1416 63.5129 48.1653 62.6322 48.7228 62.1046C52.5289 58.4949 54.6241 53.6185 54.6241 48.3743C54.6241 37.9429 46.1378 29.4567 35.706 29.4567C25.2723 29.4567 16.7859 37.9429 16.7859 48.3743C16.7859 58.8077 25.2723 67.2938 35.706 67.2938C37.7211 67.2938 39.7041 66.979 41.6031 66.3562C42.3341 66.1215 43.1195 66.5168 43.3604 67.2454C43.5988 67.9783 43.202 68.7638 42.4711 69.0046C40.2938 69.7161 38.0169 70.0797 35.706 70.0797C23.7368 70.0797 14 60.3431 14 48.3743C14 36.4075 23.7368 26.6709 35.706 26.6709C47.6728 26.6709 57.4096 36.407 57.4096 48.3738Z" fill="currentColor"/>
+                                    <path d="M77.9999 53.9735C77.9999 64.3818 69.5302 72.8489 59.124 72.8489C48.7154 72.8489 40.248 64.3818 40.248 53.9735C40.248 47.6988 43.3525 41.8502 48.5571 38.3296C49.1951 37.8987 50.0608 38.0656 50.4898 38.7036C50.9207 39.3417 50.7538 40.2054 50.1181 40.6362C45.6825 43.6397 43.0321 48.6241 43.0321 53.9735C43.0321 62.844 50.2513 70.063 59.124 70.063C67.9948 70.063 75.214 62.844 75.214 53.9735C75.214 45.1006 67.9948 37.8821 59.124 37.8821C58.4755 37.8821 57.8228 37.92 57.1871 37.9982C56.4206 38.0893 55.7299 37.5442 55.6369 36.7819C55.5459 36.0173 56.091 35.3247 56.8557 35.2318C56.8661 35.2295 56.877 35.2295 56.8874 35.2276C57.6227 35.1408 58.3745 35.0986 59.124 35.0986C60.4399 35.0986 61.726 35.2337 62.968 35.4935C71.5392 37.2711 77.9999 44.8831 77.9999 53.9735Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ref-info">
+                            <h3>Мешітте неке қию рәсімі</h3>
+                            <p>Приглашаются близкие и родственники</p>
+                        </div>
+                    </div>
+
+                    <!-- 4. Свадебная прогулка (av.svg) -->
+                    <div class="ref-timeline-row">
+                        <div class="ref-time">14:00</div>
+                        <div class="ref-node">
+                            <div class="ref-icon-circle">
+                                <svg width="26" height="26" viewBox="0 0 92 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M73.6381 29.8799H18.3612C17.6071 29.8799 17 30.4914 17 31.2411V68.062C17 68.8116 17.6071 69.4232 18.3612 69.4232H73.6381C74.3884 69.4232 74.9993 68.8116 74.9993 68.062V31.2411C74.9999 30.4914 74.3884 29.8799 73.6381 29.8799ZM72.277 66.7009H19.7223V32.6028H72.277V66.7009Z" fill="currentColor"/>
+                                    <path d="M60.0075 46.6163C59.8361 45.6789 59.5793 44.766 59.2453 43.894C57.012 38.0086 51.3174 33.8184 44.6577 33.8184C38.0018 33.8184 32.3078 38.0086 30.0739 43.894C29.7399 44.766 29.4831 45.6789 29.3117 46.6163C29.1447 47.5254 29.0586 48.4628 29.0586 49.4202C29.0586 58.0204 36.0567 65.0183 44.657 65.0183C53.2611 65.0183 60.2593 58.0204 60.2593 49.4202C60.2599 48.4628 60.1745 47.5248 60.0075 46.6163ZM44.6577 62.2997C37.5573 62.2997 31.7779 56.5205 31.7779 49.4202C31.7779 42.3162 37.5573 36.5407 44.6577 36.5407C51.7619 36.5407 57.5412 42.3162 57.5412 49.4202C57.5412 56.5205 51.7619 62.2997 44.6577 62.2997Z" fill="currentColor"/>
+                                    <path d="M44.6463 38.8721C38.8298 38.8721 34.0977 43.6041 34.0977 49.4204C34.0977 55.2367 38.8298 59.9688 44.6463 59.9688C50.4627 59.9688 55.1948 55.2367 55.1948 49.4204C55.1948 43.6041 50.4627 38.8721 44.6463 38.8721ZM44.6463 57.2458C40.3298 57.2458 36.8207 53.7362 36.8207 49.4204C36.8207 45.104 40.3298 41.5906 44.6463 41.5906C48.9628 41.5906 52.4762 45.104 52.4762 49.4204C52.4762 53.7368 48.9628 57.2458 44.6463 57.2458Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ref-info">
+                            <h3>Свадебная прогулка</h3>
+                            <p>Естелік фотосессия мен серуендеу</p>
+                        </div>
+                    </div>
+
+                    <!-- 5. Той салтанаты (dinner.svg) -->
+                    <div class="ref-timeline-row">
+                        <div class="ref-time">15:00</div>
+                        <div class="ref-node">
+                            <div class="ref-icon-circle">
+                                <svg width="26" height="26" viewBox="0 0 92 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M45.3947 23.4915L44.3942 23.4321L26.7837 22.3648C26.4168 22.3426 26.0537 22.4688 25.7798 22.713C25.5018 22.9573 25.3352 23.302 25.3129 23.669L24.6383 34.8478L24.0196 45.0556C23.8489 47.9122 24.7975 50.6649 26.6947 52.807C28.2808 54.5963 30.3703 55.7823 32.6824 56.2195C33.1379 56.3085 33.5973 56.3639 34.0682 56.3936C34.2868 56.4084 34.5054 56.4158 34.724 56.4158C34.9723 56.4158 35.2166 56.4084 35.4614 56.3901C40.7745 56.0271 45.0797 51.7437 45.4061 46.3489L46.0951 34.9259L46.1989 33.2588L46.3325 31.0431L46.6995 24.9629C46.7434 24.1952 46.1618 23.536 45.3947 23.4915ZM42.6272 46.1817C42.3675 50.5205 38.6256 53.8885 34.2349 53.618C32.1191 53.4884 30.1814 52.5473 28.7768 50.9611C27.3727 49.3756 26.6685 47.3374 26.7986 45.2217L27.3316 36.407L27.4983 33.628L28.0057 25.2249L43.8344 26.1809L42.6272 46.1817Z" fill="currentColor"/>
+                                    <path d="M68.4159 39.3824L65.2774 18.1887C65.222 17.8217 65.0256 17.4958 64.7288 17.2732C64.4326 17.0546 64.0622 16.9622 63.6952 17.0141L45.2548 19.7485C44.4952 19.8598 43.9689 20.5676 44.0842 21.3273L44.3953 23.4316L45.7251 32.4055L46.0956 34.9248L47.2222 42.5204C47.9927 47.7336 52.5428 51.6649 57.8045 51.6649H57.8079C57.8713 51.6649 57.9341 51.6649 57.9969 51.6615C58.4603 51.6541 58.9272 51.6135 59.3861 51.5467C59.8495 51.4765 60.305 51.3801 60.7496 51.2506C63.0132 50.617 64.992 49.2535 66.4183 47.3341C68.1266 45.0362 68.8343 42.2127 68.4159 39.3824ZM64.1843 45.6772C62.9247 47.378 61.0755 48.4858 58.9785 48.7929C58.5893 48.8523 58.1966 48.8819 57.8074 48.8819H57.804C53.9137 48.8819 50.5457 45.97 49.9749 42.1129L48.6816 33.3723L48.2741 30.6231L47.0402 22.2936L62.7278 19.9706L65.662 39.7893C65.9736 41.8834 65.448 43.9769 64.1843 45.6772Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ref-info">
+                            <h3>Той салтанаты</h3>
+                            <p>Барлық қонақтарды күтеміз!</p>
+                            <span class="ref-location-sub">Көкшетау қ., «Меруерт» б/з</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider-dots">
+                <span></span><span></span><span></span>
+            </div>
+
+            <!-- ФОРМА / ОПРОС -->
+            <div class="rsvp-form-section">
+                <div class="rsvp-title">Қонағымыз үшін 2 сұрақ</div>
+                <div class="rsvp-desc">Тойға келетініңізді растауыңызды өтінеміз:</div>
+                
+                <div id="formSuccessMessage" class="success-message" style="display: none;">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#aa8c72" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+                    <h3>Рақмет!</h3>
+                    <p>Жауабыңыз сәтті қабылданды.</p>
+                </div>
+
                 <form id="googleCustomForm" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSf7p2OFIkBvC_vvEX4PUsOi7J27VOdldaoESaHEj2puLz5hDQ/formResponse" method="POST" target="hidden_iframe" onsubmit="handleFormSubmit()">
-                    
-                    <!-- Системные ключи Google -->
                     <input type="hidden" name="fvv" value="1">
                     <input type="hidden" name="pageHistory" value="0">
                     <input type="hidden" name="fbzx" value="-413594422430955357">
-
-                    <!-- Скрытое поле, куда склеятся все имена через запятую -->
                     <input type="hidden" name="entry.1173247662" id="combinedGuestNames">
 
-                    <!-- Вопрос 1: Придете ли вы -->
                     <div class="form-group">
-                        <label class="form-label">Придете ли вы на свадьбу 27 сентября? <span class="req">*</span></label>
+                        <label class="form-label">1. Тойға келесіз бе? <span class="req">*</span></label>
                         <div class="radio-options">
                             <label class="radio-card">
-                                <input type="radio" name="entry.1147025442" value="Да" checked required>
-                                <span>Да</span>
+                                <input type="radio" name="entry.1147025442" value="Иә, әрине келемін" checked required>
+                                <span>Иә, әрине келемін</span>
                             </label>
                             <label class="radio-card">
-                                <input type="radio" name="entry.1147025442" value="Нет">
-                                <span>Нет</span>
+                                <input type="radio" name="entry.1147025442" value="Жұбайыммен/отбасыммен келемін">
+                                <span>Жұбайыммен/отбасыммен келемін</span>
                             </label>
                             <label class="radio-card">
-                                <input type="radio" name="entry.1147025442" value="пока не уверен">
-                                <span>Пока не уверен</span>
+                                <input type="radio" name="entry.1147025442" value="Өкінішке орай келе алмаймын">
+                                <span>Өкінішке орай келе алмаймын</span>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Вопрос 2: Имена гостей (Раздельные динамические поля) -->
                     <div class="form-group">
-                        <label class="form-label">Введите имена тех кто придет?</label>
+                        <label class="form-label">2. Келетін қонақтардың аты-жөні:</label>
                         <div id="guestsContainer">
                             <div class="guest-input-row">
-                                <input type="text" class="form-input guest-name-input" placeholder="Имя и Фамилия">
+                                <input type="text" class="form-input guest-name-input" placeholder="Аты-жөніңіз">
                             </div>
                         </div>
 
                         <button type="button" class="add-guest-btn" onclick="addGuestInput()">
-                            + Добавить ещё гостя
+                            + Қонақ қосу
                         </button>
                     </div>
 
-                    <button type="submit" class="submit-btn" id="submitBtn">Отправить ответ</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">Жауап беру</button>
                 </form>
 
-                <!-- Скрытый iframe для фоновой отправки -->
                 <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) { showSuccess(); }"></iframe>
             </div>
 
@@ -631,125 +309,77 @@
                 <span></span><span></span><span></span>
             </div>
 
-            <!-- 5. Секция Карта проезда -->
-            <div class="map-section">
-                <div class="map-title">Карта проезда</div>
+            <!-- КАРТА -->
+            <div class="map-section" id="map-section">
+                <div class="map-title">Мейрамхананы картадан табыңыз</div>
 
                 <div id="leaflet-map"></div>
 
                 <a href="https://2gis.kz/kokshetau/geo/70000001032928111/69.390562,53.288683" target="_blank" class="gis-direct-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-                    Открыть маршрут в 2GIS
+                    2GIS арқылы маршрут ашу
                 </a>
             </div>
 
             <div class="footer-note">
-                С любовью ждем вас!
+                Тойымыздың қадірлі қонағы болыңыздар!
             </div>
         </div>
 
     </div>
 
-    <!-- Скрипты -->
-    <script>
-        // Функция добавления дополнительного поля ввода для ещё одного гостя
-        function addGuestInput() {
-            const container = document.getElementById('guestsContainer');
-            const count = container.querySelectorAll('.guest-input-row').length + 1;
+    <!-- BOTTOM SHEET МОДАЛЬДІ ТЕРЕЗЕСІ (ОЛИВКОВЫЙ КҮНТІЗБЕ) -->
+    <div class="bottom-sheet-overlay" id="sheetOverlay" onclick="closeBottomSheet()"></div>
+    
+    <div class="bottom-sheet" id="bottomSheet">
+        <div class="sheet-drag-handle"></div>
+        <button class="sheet-close-btn" onclick="closeBottomSheet()">✕</button>
 
-            const row = document.createElement('div');
-            row.className = 'guest-input-row';
-            
-            row.innerHTML = `
-                <input type="text" class="form-input guest-name-input" placeholder="Имя и Фамилия гостя ${count}">
-                <button type="button" class="remove-guest-btn" onclick="removeGuestInput(this)" title="Удалить">✕</button>
-            `;
-            container.appendChild(row);
-        }
+        <div class="olive-calendar-card">
+            <div class="olive-header-sub">ТОЙ ӨТЕТІН КҮНІ</div>
+            <div class="olive-month-title">27 Қыркүйек</div>
+            <div class="olive-time-sub">САҒАТ 15:00</div>
 
-        // Функция удаления поля гостя
-        function removeGuestInput(btn) {
-            btn.parentElement.remove();
-        }
+            <div class="olive-days-header">
+                <span>ДС</span>
+                <span>СС</span>
+                <span>СР</span>
+                <span>БС</span>
+                <span>ЖМ</span>
+                <span>СН</span>
+                <span>ЖС</span>
+            </div>
 
-        // Обработка отправки: сцепление всех имен в одну строку через запятую
-        let submitted = false;
+            <div class="olive-grid">
+                <span class="empty"></span>
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+                <span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
+                <span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span>
+                <span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span>
+                
+                <span class="olive-active-day">
+                    <svg class="heart-badge" viewBox="0 0 100 100">
+                        <path d="M50,88 C20,65 5,45 5,28 C5,14 16,5 30,5 C40,5 46,11 50,16 C54,11 60,5 70,5 C84,5 95,14 95,28 C95,45 80,65 50,88 Z" fill="#c47385" />
+                    </svg>
+                    <span class="day-num">27</span>
+                </span>
 
-        function handleFormSubmit() {
-            const inputs = document.querySelectorAll('.guest-name-input');
-            const names = [];
+                <span>28</span><span>29</span><span>30</span>
+            </div>
+        </div>
 
-            inputs.forEach(input => {
-                const val = input.value.trim();
-                if (val) names.push(val);
-            });
+        <div class="sheet-action-buttons">
+            <button class="add-cal-btn google-btn" onclick="addToGoogleCalendar()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                Google Calendar-ға қосу
+            </button>
+            <button class="add-cal-btn ics-btn" onclick="downloadICSFile()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Apple / ИФайл сақтау (.ics)
+            </button>
+        </div>
+    </div>
 
-            // Записываем список имен через запятую в скрытое поле Google формы
-            document.getElementById('combinedGuestNames').value = names.join(', ');
-
-            submitted = true;
-            const btn = document.getElementById('submitBtn');
-            btn.innerText = 'Отправка...';
-            btn.style.opacity = '0.7';
-            btn.disabled = true;
-        }
-
-        function showSuccess() {
-            document.getElementById('googleCustomForm').style.display = 'none';
-            document.getElementById('formSuccessMessage').style.display = 'block';
-        }
-
-        // Карта Leaflet (Кокшетау, БЗ Меруерт)
-        const lat = 53.288683;
-        const lng = 69.390562;
-
-        const map = L.map('leaflet-map', {
-            zoomControl: false,
-            scrollWheelZoom: false,
-            attributionControl: false
-        }).setView([lat, lng], 16);
-
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            maxZoom: 19
-        }).addTo(map);
-
-        const customIcon = L.divIcon({
-            className: 'custom-pin',
-            html: `<div style="background:#aa8c72; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.25); border:2px solid #fff;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-                   </div>`,
-            iconSize: [34, 34],
-            iconAnchor: [17, 34]
-        });
-
-        const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
-        marker.bindPopup("<b style='font-family:sans-serif;'>Банкетный зал «Меруерт»</b><br>г. Кокшетау").openPopup();
-
-        // Таймер обратного отсчета
-        function updateTimer() {
-            const now = new Date();
-            let currentYear = now.getFullYear();
-            let weddingDate = new Date(currentYear, 8, 27, 15, 0, 0);
-
-            if (now > weddingDate) {
-                weddingDate = new Date(currentYear + 1, 8, 27, 15, 0, 0);
-            }
-
-            const diff = weddingDate - now;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / 1000 / 60) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-
-            document.getElementById('days').innerText = days < 10 ? '0' + days : days;
-            document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
-            document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
-            document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
-        }
-
-        setInterval(updateTimer, 1000);
-        updateTimer();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
