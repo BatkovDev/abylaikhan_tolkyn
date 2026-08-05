@@ -17,7 +17,6 @@
     padding: 0;
 }
 
-/* Десктоп фон да телефон фоны сияқты толық бірдей бежевый түс */
 body {
     background-color: var(--bg-color);
     font-family: var(--font-body);
@@ -28,7 +27,6 @@ body {
     min-height: 100vh;
 }
 
-/* ШЕКТЕУ: Ортадағы блок ең көбі 500px болады */
 .mobile-wrapper {
     width: 100%;
     max-width: 500px;
@@ -44,7 +42,6 @@ body {
 /* ==========================================
    ВИНИЛ ПЛАСТИНКАСЫ (МУЗЫКА БАТЫРМАСЫ)
    ========================================== */
-/* ТЕЛЕФОНДА: Оң жақ шетте сақталады, скроллда кіріп-шығады */
 .vinyl-wrapper {
     position: fixed;
     top: 25px;
@@ -61,7 +58,6 @@ body {
     right: -62px;
 }
 
-/* ДЕСКТОПТА: Оң жақтағы бос кеңістіктің тура ортасында орналасады */
 @media (min-width: 850px) {
     .vinyl-wrapper {
         top: 50% !important;
@@ -391,8 +387,8 @@ body {
     position: relative;
     z-index: 1;
     width: 100%;
-    margin-top: -15px;
-    margin-bottom: -15px;
+    margin-top: -16px;
+    margin-bottom: -16px;
     overflow: hidden;
     background-color: #000;
 }
@@ -461,10 +457,11 @@ body {
 
 .ref-timeline {
     position: relative;
-    max-width: 400px;
+    max-width: 440px;
     margin: 0 auto;
 }
 
+/* Вертикаль байланыстырушы сызық: 70px (time) + 25px (half node) = 95px */
 .ref-timeline::before {
     content: '';
     position: absolute;
@@ -482,6 +479,7 @@ body {
     margin-bottom: 35px;
     position: relative;
     z-index: 2;
+    width: 100%;
 }
 
 .ref-time {
@@ -492,6 +490,7 @@ body {
     color: var(--text-main);
     text-align: right;
     padding-right: 10px;
+    flex-shrink: 0; /* Уақыт блогы қысылмайды */
 }
 
 .ref-node {
@@ -499,7 +498,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Иконка блогы қысылмайды */
 }
 
 .ref-icon-circle {
@@ -524,6 +523,7 @@ body {
     text-align: left;
     padding-left: 15px;
     flex-grow: 1;
+    min-width: 0; /* Мәтін сыртқа тасып кетпей, авто-сыйады */
 }
 
 .ref-info h3 {
@@ -544,6 +544,52 @@ body {
     color: var(--accent-color);
     margin-top: 4px;
     border-bottom: 1px dashed var(--accent-color);
+}
+
+/* ==========================================
+   ШАҒЫН СМАРТФОНДАРҒА АРНАЛҒАН АДАПТИВ ( < 400px )
+   ========================================== */
+@media (max-width: 400px) {
+    .program-ref-section {
+        padding: 10px 10px;
+    }
+
+    /* Вертикаль сызықтың жаңа орны: 52px (time) + 19px (half node) = 71px */
+    .ref-timeline::before {
+        left: 71px;
+    }
+
+    .ref-time {
+        width: 52px;
+        font-size: 18px;
+        padding-right: 4px;
+    }
+
+    .ref-node {
+        width: 38px;
+    }
+
+    .ref-icon-circle {
+        width: 38px;
+        height: 38px;
+    }
+
+    .ref-icon-circle svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .ref-info {
+        padding-left: 10px;
+    }
+
+    .ref-info h3 {
+        font-size: 14px;
+    }
+
+    .ref-info p {
+        font-size: 11px;
+    }
 }
 
 /* ФОРМА */
