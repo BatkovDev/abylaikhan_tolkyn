@@ -98,7 +98,28 @@ setInterval(updateTimer, 1000);
 updateTimer();
 
 
-// --- 6. Динамикалық қонақ қосу/жою және Форманы тексеру ---
+// --- 6. Динамикалық қонақ қосу/жою және Радио-батырмаларды бақылау ---
+document.addEventListener('DOMContentLoaded', () => {
+    const radios = document.querySelectorAll('input[name="entry.1147025442"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', updateNameRequiredStatus);
+    });
+});
+
+// 3-вариант («Өкінішке орай келе алмаймын») таңдалса, аты-жөнін міндеттемейді
+function updateNameRequiredStatus() {
+    const selectedRadio = document.querySelector('input[name="entry.1147025442"]:checked');
+    const firstInput = document.querySelector('.guest-name-input');
+
+    if (!firstInput) return;
+
+    if (selectedRadio && selectedRadio.value === "Өкінішке орай келе алмаймын") {
+        firstInput.removeAttribute('required');
+    } else {
+        firstInput.setAttribute('required', 'required');
+    }
+}
+
 function addGuestInput() {
     const container = document.getElementById('guestsContainer');
     const count = container.querySelectorAll('.guest-input-row').length + 1;
@@ -120,6 +141,9 @@ function removeGuestInput(btn) {
 let submitted = false;
 
 function handleFormSubmit(event) {
+    const selectedRadio = document.querySelector('input[name="entry.1147025442"]:checked');
+    const isNotAttending = selectedRadio && selectedRadio.value === "Өкінішке орай келе алмаймын";
+
     const inputs = document.querySelectorAll('.guest-name-input');
     const names = [];
 
@@ -128,10 +152,18 @@ function handleFormSubmit(event) {
         if (val) names.push(val);
     });
 
-    if (names.length === 0) {
-        alert('Өтініш, аты-жөніңізді енгізіңіз!');
-        if (event) event.preventDefault();
-        return false;
+    if (isNotAttending) {
+        // Келе алмайтынын таңдаса және атын жазбаса - "Неизвестный пользователь" деп белгілейді
+        if (names.length === 0) {
+            names.push('Неизвестный пользователь');
+        }
+    } else {
+        // Келетінін таңдаса - аты-жөнін енгізу міндетті
+        if (names.length === 0) {
+            alert('Өтініш, аты-жөніңізді енгізіңіз!');
+            if (event) event.preventDefault();
+            return false;
+        }
     }
 
     document.getElementById('combinedGuestNames').value = names.join(', ');
