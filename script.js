@@ -1,15 +1,16 @@
-// --- 1. Музыканы реттеу ---
+// --- 1. Музыка және Винил пластинкасын басқару ---
 const bgMusic = document.getElementById('bgMusic');
-const musicToggleBtn = document.getElementById('musicToggleBtn');
+const vinylBtn = document.getElementById('vinylBtn');
+const vinylDisk = document.getElementById('vinylDisk');
 let isPlaying = false;
 
 function toggleMusic() {
     if (isPlaying) {
         bgMusic.pause();
-        musicToggleBtn.classList.remove('playing');
+        vinylDisk.classList.remove('spinning');
     } else {
         bgMusic.play().then(() => {
-            musicToggleBtn.classList.add('playing');
+            vinylDisk.classList.add('spinning');
         }).catch(err => {
             console.log("Музыка автоойнату бұғатталды: ", err);
         });
@@ -17,20 +18,31 @@ function toggleMusic() {
     isPlaying = !isPlaying;
 }
 
-musicToggleBtn.addEventListener('click', toggleMusic);
-
 document.addEventListener('click', function initAudio() {
     if (!isPlaying) {
         bgMusic.play().then(() => {
             isPlaying = true;
-            musicToggleBtn.classList.add('playing');
+            vinylDisk.classList.add('spinning');
         }).catch(() => {});
     }
     document.removeEventListener('click', initAudio);
 }, { once: true });
 
 
-// --- 2. Bottom Sheet (Күнтізбе модалін ашу/жабу) ---
+// --- 2. Скролл кезінде Пластинканың ысырылуы ---
+let isScrollingTimer = null;
+
+window.addEventListener('scroll', () => {
+    vinylBtn.classList.add('scrolling');
+
+    clearTimeout(isScrollingTimer);
+    isScrollingTimer = setTimeout(() => {
+        vinylBtn.classList.remove('scrolling');
+    }, 600);
+});
+
+
+// --- 3. Bottom Sheet (Күнтізбені ашу/жабу) ---
 function openBottomSheet() {
     document.getElementById('sheetOverlay').classList.add('active');
     document.getElementById('bottomSheet').classList.add('active');
@@ -44,47 +56,16 @@ function closeBottomSheet() {
 }
 
 
-// --- 3. Смартфон күнтізбесіне сақтау ---
-function addToGoogleCalendar() {
-    const title = encodeURIComponent("Абылайхан & Толқын - Үйлену тойы");
-    const details = encodeURIComponent("Абылайхан мен Толқынның үйлену тойына шақыру. «Меруерт» мейрамханасы.");
-    const location = encodeURIComponent("Көкшетау қ., «Меруерт» мейрамханасы");
-    const dates = "20260927T100000Z/20260927T180000Z";
-
-    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}`;
-    window.open(url, '_blank');
-}
-
-function downloadICSFile() {
-    const icsData = 
-`BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Wedding Invitation//KK
-BEGIN:VEVENT
-SUMMARY:Абылайхан & Толқын - Үйлену тойы
-DESCRIPTION:Абылайхан мен Толқынның үйлену тойына шақыру.
-LOCATION:Көкшетау қ.\, «Меруерт» мейрамханасы
-DTSTART:20260927T100000Z
-DTEND:20260927T180000Z
-END:VEVENT
-END:VCALENDAR`;
-
-    const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.setAttribute('download', 'wedding-27-09-2026.ics');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-
-// --- 4. Картаға скролл жасау ---
+// --- 4. Картаға және Беттің басына көтерілу ---
 function scrollToMap() {
     const mapSection = document.getElementById('map-section');
     if (mapSection) {
         mapSection.scrollIntoView({ behavior: 'smooth' });
     }
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 
@@ -117,7 +98,7 @@ setInterval(updateTimer, 1000);
 updateTimer();
 
 
-// --- 6. Динамикалық қонақ қосу/жою ---
+// --- 6. Динамикалық қонақ қосу/жою және Форманы тексеру ---
 function addGuestInput() {
     const container = document.getElementById('guestsContainer');
     const count = container.querySelectorAll('.guest-input-row').length + 1;
@@ -138,7 +119,7 @@ function removeGuestInput(btn) {
 
 let submitted = false;
 
-function handleFormSubmit() {
+function handleFormSubmit(event) {
     const inputs = document.querySelectorAll('.guest-name-input');
     const names = [];
 
@@ -147,6 +128,13 @@ function handleFormSubmit() {
         if (val) names.push(val);
     });
 
+    // Қонақ аты-жөні толтырылмаған болса жіберуді бұғаттау
+    if (names.length === 0) {
+        alert('Өтініш, аты-жөніңізді енгізіңіз!');
+        if (event) event.preventDefault();
+        return false;
+    }
+
     document.getElementById('combinedGuestNames').value = names.join(', ');
 
     submitted = true;
@@ -154,6 +142,7 @@ function handleFormSubmit() {
     btn.innerText = 'Жіберілуде...';
     btn.style.opacity = '0.7';
     btn.disabled = true;
+    return true;
 }
 
 function showSuccess() {

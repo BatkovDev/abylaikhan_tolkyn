@@ -8,7 +8,7 @@
     <!-- Подключение шрифтов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Leaflet Maps API -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -20,13 +20,16 @@
 
     <!-- Фондық музыка -->
     <audio id="bgMusic" src="./music.mp3" loop></audio>
-    <button class="music-toggle-btn" id="musicToggleBtn" title="Музыканы қосу/өшіру">
-        <svg id="musicIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-        </svg>
-    </button>
+
+    <!-- ВИНИЛ ПЛАСТИНКАСЫ (МУЗЫКА БАТЫРМАСЫ) -->
+    <div class="vinyl-wrapper" id="vinylBtn" title="Музыканы қосу/өшіру" onclick="toggleMusic()">
+        <div class="vinyl-disk" id="vinylDisk">
+            <div class="vinyl-shine"></div>
+            <div class="vinyl-label">
+                <div class="vinyl-hole"></div>
+            </div>
+        </div>
+    </div>
 
     <div class="mobile-wrapper">
         
@@ -65,13 +68,13 @@
                 <span></span><span></span><span></span>
             </div>
 
-            <!-- КҮНТІЗБЕ БЛОГЫ ЖӘНЕ БАТЫРМА -->
+            <!-- КҮНТІЗБЕ СЕКЦИЯСЫ -->
             <div class="calendar-section">
                 <div class="date-header-title">Той өтетін күні</div>
                 <div class="date-big">27 қыркүйек 2026 жыл</div>
                 <div class="time-big">Сағат 15:00</div>
 
-                <!-- Күнтізбені ашу және сақтау батырмасы -->
+                <!-- Күнтізбені ашу батырмасы -->
                 <button class="open-calendar-btn" onclick="openBottomSheet()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -80,7 +83,7 @@
                         <line x1="3" y1="10" x2="21" y2="10"></line>
                         <path d="M12 14v4M10 16h4"></path>
                     </svg>
-                    Күнтізбеге қосу
+                    Күнтізбені көру
                 </button>
 
                 <div class="venue-brief">
@@ -159,7 +162,7 @@
                 </div>
 
                 <div class="ref-timeline">
-                    <!-- 1. Утро невесты (bride.svg) -->
+                    <!-- 1. Қалыңдық таңы -->
                     <div class="ref-timeline-row">
                         <div class="ref-time">09:00</div>
                         <div class="ref-node">
@@ -170,12 +173,12 @@
                             </div>
                         </div>
                         <div class="ref-info">
-                            <h3>Утро невесты</h3>
-                            <p>Подружка невесты обязательно!</p>
+                            <h3>Қалыңдық таңы</h3>
+                            <p>Қалыңдықтың құрбысы міндетті түрде!</p>
                         </div>
                     </div>
 
-                    <!-- 2. Сборы жениха (groom.svg) -->
+                    <!-- 2. Күйеу жігіттің дайындығы -->
                     <div class="ref-timeline-row">
                         <div class="ref-time">09:30</div>
                         <div class="ref-node">
@@ -186,12 +189,12 @@
                             </div>
                         </div>
                         <div class="ref-info">
-                            <h3>Сборы жениха</h3>
-                            <p>Друг жениха обязательно!</p>
+                            <h3>Күйеу жігіттің дайындығы</h3>
+                            <p>Күйеу жігіттің досы міндетті түрде!</p>
                         </div>
                     </div>
 
-                    <!-- 3. Мешітте неке қию (rings.svg) -->
+                    <!-- 3. Мешітте неке қию -->
                     <div class="ref-timeline-row">
                         <div class="ref-time">12:30</div>
                         <div class="ref-node">
@@ -205,11 +208,11 @@
                         </div>
                         <div class="ref-info">
                             <h3>Мешітте неке қию рәсімі</h3>
-                            <p>Приглашаются близкие и родственники</p>
+                            <p>Жақын туыстар мен бауырлар шақырылады</p>
                         </div>
                     </div>
 
-                    <!-- 4. Свадебная прогулка (av.svg) -->
+                    <!-- 4. Той серуені -->
                     <div class="ref-timeline-row">
                         <div class="ref-time">14:00</div>
                         <div class="ref-node">
@@ -222,12 +225,12 @@
                             </div>
                         </div>
                         <div class="ref-info">
-                            <h3>Свадебная прогулка</h3>
-                            <p>Естелік фотосессия мен серуендеу</p>
+                            <h3>Той серуені (Фотосессия)</h3>
+                            <p>Естелік фотосессия мен қыдыру</p>
                         </div>
                     </div>
 
-                    <!-- 5. Той салтанаты (dinner.svg) -->
+                    <!-- 5. Той салтанаты -->
                     <div class="ref-timeline-row">
                         <div class="ref-time">15:00</div>
                         <div class="ref-node">
@@ -240,7 +243,7 @@
                         </div>
                         <div class="ref-info">
                             <h3>Той салтанаты</h3>
-                            <p>Барлық қонақтарды күтеміз!</p>
+                            <p>Барлық асыл қонақтарымызды күтеміз!</p>
                             <span class="ref-location-sub">Көкшетау қ., «Меруерт» б/з</span>
                         </div>
                     </div>
@@ -262,7 +265,7 @@
                     <p>Жауабыңыз сәтті қабылданды.</p>
                 </div>
 
-                <form id="googleCustomForm" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSf7p2OFIkBvC_vvEX4PUsOi7J27VOdldaoESaHEj2puLz5hDQ/formResponse" method="POST" target="hidden_iframe" onsubmit="handleFormSubmit()">
+                <form id="googleCustomForm" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSf7p2OFIkBvC_vvEX4PUsOi7J27VOdldaoESaHEj2puLz5hDQ/formResponse" method="POST" target="hidden_iframe" onsubmit="return handleFormSubmit(event)">
                     <input type="hidden" name="fvv" value="1">
                     <input type="hidden" name="pageHistory" value="0">
                     <input type="hidden" name="fbzx" value="-413594422430955357">
@@ -287,10 +290,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">2. Келетін қонақтардың аты-жөні:</label>
+                        <label class="form-label">2. Келетін қонақтардың аты-жөні: <span class="req">*</span></label>
                         <div id="guestsContainer">
                             <div class="guest-input-row">
-                                <input type="text" class="form-input guest-name-input" placeholder="Аты-жөніңіз">
+                                <!-- Міндетті толтырылуы тиіс бірінші өріс -->
+                                <input type="text" class="form-input guest-name-input" placeholder="Аты-жөніңіз" required>
                             </div>
                         </div>
 
@@ -323,6 +327,14 @@
 
             <div class="footer-note">
                 Тойымыздың қадірлі қонағы болыңыздар!
+            </div>
+
+            <!-- ФУТЕРДЕГІ ЖОҒАРЫҒА КӨТЕРІЛУ БАТЫРМАСЫ -->
+            <div class="scroll-top-container">
+                <button class="scroll-top-btn" onclick="scrollToTop()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+                    Жоғарыға көтерілу
+                </button>
             </div>
         </div>
 
@@ -366,17 +378,6 @@
 
                 <span>28</span><span>29</span><span>30</span>
             </div>
-        </div>
-
-        <div class="sheet-action-buttons">
-            <button class="add-cal-btn google-btn" onclick="addToGoogleCalendar()">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
-                Google Calendar-ға қосу
-            </button>
-            <button class="add-cal-btn ics-btn" onclick="downloadICSFile()">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Apple / ИФайл сақтау (.ics)
-            </button>
         </div>
     </div>
 
