@@ -207,3 +207,19 @@ const customIcon = L.divIcon({
 
 const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
 marker.bindPopup("<b style='font-family:sans-serif;'>«Меруерт» мейрамханасы</b><br>г. Кокшетау").openPopup();
+
+
+// --- 8. Сұрақтарға жауап (FAQ Accordion) ---
+function toggleFaq(button) {
+    const item = button.closest('.faq-item');
+    const isActive = item.classList.contains('active');
+
+    // Басқа ашық тұрған сұрақтарды жабу
+    document.querySelectorAll('.faq-item.active').forEach(openItem => {
+        if (openItem !== item) {
+            openItem.classList.remove('active');
+        }
+    });
+
+    item.classList.toggle('active');
+}
